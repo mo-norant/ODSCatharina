@@ -39,9 +39,9 @@
         glassamenstelling: string;
         datumBeschikbaar: Date;
         company: Company;
-        Location: LocationOogstKaartItem;
+        location: LocationOogstKaartItem;
         hoeveelheid: number;
-        category: number
+        category: string
         afmetingen: string;
         weight: Weight;
         vraagPrijsPerEenheid: number;
@@ -51,7 +51,15 @@
         onlineStatus: boolean;
         concept: string;    
         userID: string;  
-        Views: number
+        Views: number;
+        avatar : Avatar;
         
+    }
+
+    export class Avatar {
+        date : Date;
+        imageID: number;
+        name : string;
+        uri: string;
     }
 

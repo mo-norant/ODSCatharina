@@ -1,8 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AuthService } from './../../../../../auth/auth.service';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatHorizontalStepper, MatStepper } from '@angular/material';
 import { OogstkaartService } from '../oogstkaart.service';
 import { OogstKaartItem, Weight, LocationOogstKaartItem } from '../../../../../models/models';
+import { HttpRequest, HttpClient, HttpEventType } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-oogstkaartform',
@@ -11,21 +14,26 @@ import { OogstKaartItem, Weight, LocationOogstKaartItem } from '../../../../../m
 })
 
 export class OogstkaartformComponent implements OnInit {
-  isLinear = false;
+  isLinear = true;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
   thirdFormGroup: FormGroup;
   matHorizontalStepper: MatHorizontalStepper;
+
 
   oogstkaartID: number;
   zoom: number = 7
   postsucces: boolean = false;
   err;
 
+  avatarpreviewurl
+
   selectedlocation = {
     lat: null,
     lng: null,
   }
+
+  @ViewChild('fileInput') fileInput: ElementRef;
 
   color = 'primary';
   mode = 'determinate';
@@ -35,12 +43,14 @@ export class OogstkaartformComponent implements OnInit {
   location
 
   buttondisabled : boolean = false;
+  
+  public progress: number;
+  public message: string;
 
 
 
 
-
-  constructor(private _formBuilder: FormBuilder, private oogstkaartservice: OogstkaartService) {
+  constructor(private _formBuilder: FormBuilder, private oogstkaartservice: OogstkaartService, private http : HttpClient, private auth: AuthService) {
   
   }
 
@@ -68,8 +78,7 @@ export class OogstkaartformComponent implements OnInit {
     });
 
     this.thirdFormGroup = this._formBuilder.group({
-      files: ['', Validators.required],
-
+      productimage: null,
     });
 
 
@@ -131,6 +140,7 @@ export class OogstkaartformComponent implements OnInit {
     this.oogstkaartservice.PostLocation(this.oogstkaartID, location).subscribe(res => {
       this.stepper.next();
     }, err => {
+      this.deleteItem(this.oogstkaartID);
       this.err = err;
       this.postsucces = false;
       this.stepper.selectedIndex = 4;
@@ -144,6 +154,57 @@ export class OogstkaartformComponent implements OnInit {
 
   nextstep() {
     this.stepper.next();
+  }
+
+  uploadavatar(event){
+
+
+    let reader = new FileReader();
+    if(event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+       this.oogstkaartservice.PostProductPhoto(file, this.oogstkaartID).subscribe( res => {
+         this.stepper.next();
+       }, err => {
+         this.deleteItem(this.oogstkaartID);
+       })
+      };
+    }
+
+  }
+
+  upload(files) {
+    if (files.length === 0)
+      return;
+
+    const formData = new FormData();
+
+    
+
+    for (let file of files)
+      formData.append(file.name, file);
+
+    const uploadReq = new HttpRequest('POST', `http://10.211.55.3:45455/api/Oogstkaart/oogstkaartavatar/` +  this.oogstkaartID, formData, {
+      reportProgress: true,
+      headers : this.auth.getAuthorizationHeaders()
+    });
+
+    this.http.request(uploadReq).subscribe(event => {
+      if (event.type === HttpEventType.UploadProgress)
+        this.progress = Math.round(100 * event.loaded / event.total);
+      else if (event.type === HttpEventType.Response)
+        this.stepper.next();
+    });
+  }
+
+  private deleteItem(id : number){
+    console.log("item removed")
+    this.oogstkaartservice.DeleteItem(id).subscribe( res => {
+      this.postsucces = false;
+      this.stepper.selectedIndex = 3;
+    });
+   
   }
 
 

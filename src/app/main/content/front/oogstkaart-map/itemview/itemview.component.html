@@ -1,0 +1,64 @@
+
+
+
+<div class="card">
+
+  <!-- PREVIEW -->
+  <div class="card-preview">
+
+      <div class="fuse-card">
+
+          <img [src]="'http://10.211.55.3:45455/img/' + data.item.avatar.uri">
+
+          <div class="p-16">
+              <div class="h1">{{data.artikelnaam}}</div>
+              <div class="h4 secondary-text"> {{data.item.category}} </div>
+          </div>
+
+          <div class="p-16 pt-0 line-height-1.75">
+              {{data.item.omschrijving}}
+          </div>
+
+          <div class="p-8 pt-0" fxLayout="row" fxLayoutAlign="space-between center">
+              <div fxLayout="row" fxLayoutAlign="start center">
+                  <button mat-button (click)="onNoClick()"  color="accent">Terug</button>
+                  <button mat-button color="accent">Meer</button>
+              </div>
+
+              <button mat-icon-button aria-label="expand card"
+                      (click)="card9Expanded = !card9Expanded">
+                  <mat-icon *ngIf="card9Expanded">keyboard_arrow_up</mat-icon>
+                  <mat-icon *ngIf="!card9Expanded">keyboard_arrow_down</mat-icon>
+              </button>
+          </div>
+
+          <div class="card-expand-area" *ngIf="card9Expanded" [@expandCollapse]>
+              <div class="card-expanded-content">
+                
+                    <mat-list>
+                            <h3 mat-subheader>Algemeen</h3>
+                            <mat-list-item>
+                                <mat-icon mat-list-icon>dvr</mat-icon>
+                                <p mat-line>concept:  {{data.item.concept}}  </p>
+                                <p mat-line>categorie:  {{data.item.category}} </p>
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <h3 mat-subheader>Prijs</h3>
+                            <mat-list-item>
+                                    <mat-icon mat-list-icon>attach_money</mat-icon>
+                                    <p mat-line>Prijs totaal: €  {{data.item.vraagPrijsTotaal}}  </p>
+                                    <p mat-line>Prijs per artikel: €  {{data.item.vraagPrijsPerEenheid}} </p>
+                                </mat-list-item>
+                        </mat-list>
+
+
+              </div>
+          </div>
+
+      </div>
+
+  </div>
+  <!-- / PREVIEW -->
+
+
+</div>

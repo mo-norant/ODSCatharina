@@ -11,7 +11,7 @@ import { AgmCoreModule } from '@agm/core';
 import { TokenGuard } from '../../../../auth/token.guard';
 import { AuthModule } from 'app/auth/auth.module';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-
+import { ConfirmdeleteComponent } from './item/confirmdelete/confirmdelete.component';
 const routes: Routes = [
   {
       path     : 'catharina/oostkaart',
@@ -44,7 +44,8 @@ const routes: Routes = [
     apiKey: 'AIzaSyC20RLiyVsvMLncki9JQdKuIpHdBdSXTY0'
   }),
   ],
-  declarations: [ OogstkaartformComponent, OogstkaartlistComponent, ItemComponent],
+  declarations: [ OogstkaartformComponent, OogstkaartlistComponent, ItemComponent, ConfirmdeleteComponent],
+  entryComponents: [ConfirmdeleteComponent ],
   providers: [OogstkaartService]
 })
 export class OogstkaartModule { }

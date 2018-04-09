@@ -8,8 +8,9 @@ import { FuseSharedModule } from '../../@fuse/shared.module';
 import { MaterialModule } from '../../../material/material.module';
 import { FuseToolbarModule } from '../../toolbar/toolbar.module';
 import { FuseModule } from '../../@fuse/fuse.module';
-import { OogstkaartMapComponent, Mapitem } from './oogstkaart-map/oogstkaart-map.component';
+import { OogstkaartMapComponent } from './oogstkaart-map/oogstkaart-map.component';
 import { AgmCoreModule  } from '@agm/core';
+import { ItemviewComponent } from './oogstkaart-map/itemview/itemview.component';
 
 
 const routes: Route[] = [
@@ -37,6 +38,7 @@ const routes: Route[] = [
   ],
   
   providers: [],
-  declarations: [LanderComponent, OogstkaartMapComponent]
+  declarations: [LanderComponent, OogstkaartMapComponent, ItemviewComponent ],
+  entryComponents: [ItemviewComponent]
 })
 export class FrontModule { }
